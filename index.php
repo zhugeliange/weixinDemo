@@ -1,4 +1,6 @@
 <?php
+use ChatRobot;
+
 $token = 'zhugeliange';
 $timestamp = $_GET["timestamp"];
 $nonce = $_GET["nonce"];
@@ -11,6 +13,9 @@ sort($array);
 
 if (sha1(implode('', $array)) == $signature) {
 	echo $echostr;
+} else {
+	$chatRobot = new ChatRobot\ChatRobot();
+	$chatRobot -> chatRobot();
 }
 
 exit;

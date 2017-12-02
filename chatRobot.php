@@ -1,62 +1,60 @@
-<?
+<?php
 namespace ChatRobot;
 
-class ChatRobot 
+class ChatRobotClass
 {
 	function chatRobot()
 	{
-		echo "22222";
-		// // get post data from client AND transform xml to string
-		// $data = simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA']);
+		// get post data from client AND transform xml to string
+		$data =  (array)simplexml_load_string(file_get_contents('php://input'), 'SimpleXMLElement', LIBXML_NOCDATA);
 
-		// $toUserName = $data -> ToUserName;
-		// $fromUserName = $data -> FromUserName;
-		// $createTime = $data -> CreateTime;
-		// $msgType = $data -> MsgType;
-		// $event = $data -> Event;
+		$toUserName = isset($data['ToUserName']) ? trim($data['ToUserName']) : '';
+		$fromUserName = isset($data['FromUserName']) ? trim($data['FromUserName']) : '';
+		$createTime = isset($data['CreateTime']) ? trim($data['CreateTime']) : '';
+		$msgType = isset($data['MsgType']) ? trim($data['MsgType']) : '';
+		$event = isset($data['Event']) ? trim($data['Event']) : '';
+		$content = isset($data['Content']) ? trim($data['Content']) : '';
+		$msgId = isset($data['MsgId']) ? trim($data['MsgId']) : '';
 
-		// // judge message type is event or text
-		// switch (strtolower($msgType)) {
-		// 	case 'event':
-		// 		// judge event type is subscribe or others
-		// 		switch (strtolower($event)) {
-		// 			case 'subscribe':
-		// 				$template = "<xml>
-		// 		                    <ToUserName><![CDATA[%s]]></ToUserName>
-		// 		                    <FromUserName><![CDATA[%s]]></FromUserName>
-		// 		                    <CreateTime>%s</CreateTime>
-		// 		                    <MsgType><![CDATA[%s]]></MsgType>
-		// 		                    <Content><![CDATA[%s]]></Content>
-		// 		                    </xml>";
+		// judge message type is event or text
+		switch (strtolower($msgType)) {
+			case 'event':
+				// judge event type is subscribe or others
+				switch (strtolower($event)) {
+					case 'subscribe':
+						$template = "<xml>
+				                    <ToUserName><![CDATA[%s]]></ToUserName>
+				                    <FromUserName><![CDATA[%s]]></FromUserName>
+				                    <CreateTime>%s</CreateTime>
+				                    <MsgType><![CDATA[%s]]></MsgType>
+				                    <Content><![CDATA[%s]]></Content>
+				                    </xml>";
 
-	 //                	$result = sprintf($template, $toUserName, $fromUserName, time(), 'text', '哎呀，欢迎欢迎，热烈欢迎呀~~~');
+	                	echo sprintf($template, $toUserName, $fromUserName, time(), 'text', '哎呀，欢迎欢迎呀~~~');
 
-	 //                	echo $result;
-
-		// 				break;
+						break;
 					
-		// 			default:
-		// 				break;
-		// 		}
+					default:
+						break;
+				}
 
-		// 		break;
+				break;
 			
-		// 	case 'text':
-		// 		$template = "<xml>
-		//                     <ToUserName><![CDATA[%s]]></ToUserName>
-		//                     <FromUserName><![CDATA[%s]]></FromUserName>
-		//                     <CreateTime>%s</CreateTime>
-		//                     <MsgType><![CDATA[%s]]></MsgType>
-		//                     <Content><![CDATA[%s]]></Content>
-		//                     </xml>";
+			case 'text':
+				$template = "<xml>
+		                    <ToUserName><![CDATA[%s]]></ToUserName>
+		                    <FromUserName><![CDATA[%s]]></FromUserName>
+		                    <CreateTime>%s</CreateTime>
+		                    <MsgType><![CDATA[%s]]></MsgType>
+		                    <Content><![CDATA[%s]]></Content>
+		                    </xml>";
 
-	 //        	$result = sprintf($template, $toUserName, $fromUserName, time(), 'text', 'hehe');
+	        	echo sprintf($template, $toUserName, $fromUserName, time(), 'text', $content);
 
-	 //        	echo $result;
-		// 		break;
+				break;
 
-		// 	default:
-		// 		break;
+			default:
+				break;
 		}
 	}
 }
